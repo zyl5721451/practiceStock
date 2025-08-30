@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicestock.app.R
@@ -51,12 +52,18 @@ class TradeListFragment : Fragment() {
     }
     
     private fun setupRecyclerView() {
-        tradeRecordAdapter = TradeRecordAdapter { record ->
-            // 点击记录跳转到详情页面
-            val intent = Intent(requireContext(), TradeDetailActivity::class.java)
-            intent.putExtra("record_id", record.id)
-            startActivity(intent)
-        }
+        tradeRecordAdapter = TradeRecordAdapter(
+            onItemClick = { record ->
+                // 点击记录跳转到详情页面
+                val intent = Intent(requireContext(), TradeDetailActivity::class.java)
+                intent.putExtra("record_id", record.id)
+                startActivity(intent)
+            },
+            onItemLongClick = { record ->
+                // 长按显示删除确认对话框
+                showDeleteConfirmDialog(record)
+            }
+        )
         
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -103,13 +110,13 @@ class TradeListFragment : Fragment() {
         // 按开仓理由筛选
         if (reasonFilter != getString(R.string.all_reasons)) {
             val selectedReason = OpenReason.fromDisplayName(reasonFilter)
-            filteredRecords = filteredRecords.filter { it.openReason == selectedReason }
+            filteredRecords = filteredRecords.filter { it.openReason != null && it.openReason == selectedReason }
         }
         
         // 按结果筛选
         if (resultFilter != getString(R.string.all_results)) {
             val selectedResult = TradeResult.fromDisplayName(resultFilter)
-            filteredRecords = filteredRecords.filter { it.result == selectedResult }
+            filteredRecords = filteredRecords.filter { it.result != null && it.result == selectedResult }
         }
         
         updateUI(filteredRecords)
@@ -124,6 +131,22 @@ class TradeListFragment : Fragment() {
             binding.emptyLayout.visibility = View.GONE
             tradeRecordAdapter.updateRecords(records)
         }
+    }
+    
+    private fun showDeleteConfirmDialog(record: TradeRecord) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("删除交易记录")
+            .setMessage("确定要删除这条交易记录吗？删除后无法恢复。")
+            .setPositiveButton("删除") { _, _ ->
+                deleteRecord(record)
+            }
+            .setNegativeButton("取消", null)
+            .show()
+    }
+    
+    private fun deleteRecord(record: TradeRecord) {
+        dataManager.deleteRecord(record.id)
+        loadData() // 重新加载数据
     }
     
     override fun onDestroyView() {

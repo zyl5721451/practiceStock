@@ -4,19 +4,17 @@ import java.util.Date
 
 data class TradeRecord(
     val id: String,
-    val openReason: OpenReason,
-    val result: TradeResult,
+    val openReason: OpenReason?,
+    val result: TradeResult?,
     val imagePath: String?,
     val createdTime: Date
 )
 
 enum class OpenReason(val displayName: String) {
-    TECHNICAL_ANALYSIS("技术分析"),
-    FUNDAMENTAL_ANALYSIS("基本面分析"),
-    NEWS_EVENT("消息面"),
-    MARKET_SENTIMENT("市场情绪"),
-    FOLLOW_TREND("跟随趋势"),
-    OTHER("其他");
+    VOLUME_BREAKTHROUGH("两次成交量突破"),
+    TREND_BREAKTHROUGH("趋势中横盘突破"),
+    CALLBACK_BREAKTHROUGH("回调后突破"),
+    TREND_SUPPORT("趋势中遇到了支撑");
     
     companion object {
         fun fromDisplayName(displayName: String): OpenReason? {
@@ -27,8 +25,7 @@ enum class OpenReason(val displayName: String) {
 
 enum class TradeResult(val displayName: String) {
     PROFIT("盈利"),
-    LOSS("亏损"),
-    BREAKEVEN("保本");
+    LOSS("亏损");
     
     companion object {
         fun fromDisplayName(displayName: String): TradeResult? {
@@ -38,7 +35,7 @@ enum class TradeResult(val displayName: String) {
 }
 
 data class StatisticsData(
-    val reason: OpenReason,
+    val openReason: OpenReason,
     val count: Int,
     val percentage: Float
 )

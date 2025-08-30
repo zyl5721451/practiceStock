@@ -21,6 +21,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.practicestock.app.R
@@ -159,11 +161,11 @@ class OpenPositionFragment : Fragment() {
         Dexter.withContext(requireContext())
             .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
             .withListener(object : com.karumi.dexter.listener.single.PermissionListener {
-                override fun onPermissionGranted(response: com.karumi.dexter.listener.single.PermissionGrantedResponse) {
+                override fun onPermissionGranted(response: PermissionGrantedResponse) {
                     pickFromGallery()
                 }
                 
-                override fun onPermissionDenied(response: com.karumi.dexter.listener.single.PermissionDeniedResponse) {
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
                     Toast.makeText(requireContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
                 }
                 

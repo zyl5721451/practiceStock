@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_open_position"
+        android:icon="@drawable/ic_add_circle_outline_24"
+        android:title="@string/open_position" />
+    <item
+        android:id="@+id/nav_trading"
+        android:icon="@drawable/ic_list_24"
+        android:title="@string/trading" />
+</menu>

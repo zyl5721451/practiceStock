@@ -2,6 +2,7 @@ package com.practicestock.app.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -42,7 +43,7 @@ class TradeDetailActivity : AppCompatActivity() {
         }
         
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            finish()
         }
     }
     
@@ -70,7 +71,7 @@ class TradeDetailActivity : AppCompatActivity() {
             
             Glide.with(this)
                 .load(record.imagePath)
-                .centerCrop()
+                .fitCenter()
                 .placeholder(R.drawable.ic_image_placeholder)
                 .error(R.drawable.ic_image_placeholder)
                 .into(binding.tradeImage)
@@ -85,16 +86,16 @@ class TradeDetailActivity : AppCompatActivity() {
         }
         
         // 显示开仓理由
-        binding.reasonText.text = record.openReason.displayName
+        binding.reasonText.text = record.openReason?.displayName ?: "未知理由"
         
         // 显示结果标签
-        binding.resultChip.text = record.result.displayName
+        binding.resultChip.text = record.result?.displayName ?: "未知结果"
         
         // 根据结果设置标签颜色
         val chipBackgroundColor = when (record.result) {
             TradeResult.PROFIT -> ContextCompat.getColor(this, R.color.success_color)
             TradeResult.LOSS -> ContextCompat.getColor(this, R.color.error_color)
-            TradeResult.BREAKEVEN -> ContextCompat.getColor(this, R.color.warning_color)
+            null -> ContextCompat.getColor(this, R.color.md_theme_light_outline)
         }
         binding.resultChip.setChipBackgroundColorResource(android.R.color.transparent)
         binding.resultChip.chipBackgroundColor = android.content.res.ColorStateList.valueOf(chipBackgroundColor)
@@ -104,7 +105,7 @@ class TradeDetailActivity : AppCompatActivity() {
     }
     
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        finish()
         return true
     }
 }

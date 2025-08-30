@@ -42,7 +42,7 @@
 
     <!-- 空状态提示 -->
     <LinearLayout
-        android:id="@+id/emptyStateLayout"
+        android:id="@+id/emptyLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -57,7 +57,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@drawable/ic_pie_chart"
-            android:tint="@color/md_theme_light_onSurfaceVariant" />
+            app:tint="@color/md_theme_light_onSurfaceVariant" />
 
         <TextView
             android:layout_width="wrap_content"

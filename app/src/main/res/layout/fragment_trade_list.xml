@@ -45,7 +45,7 @@
                     android:hint="@string/open_reason_label">
 
                     <AutoCompleteTextView
-                        android:id="@+id/filterReasonSpinner"
+                        android:id="@+id/reasonFilterSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
@@ -62,7 +62,7 @@
                     android:hint="@string/result_label">
 
                     <AutoCompleteTextView
-                        android:id="@+id/filterResultSpinner"
+                        android:id="@+id/resultFilterSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />
@@ -88,7 +88,7 @@
 
     <!-- 空状态提示 -->
     <LinearLayout
-        android:id="@+id/emptyStateLayout"
+        android:id="@+id/emptyLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -103,7 +103,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@drawable/ic_empty_list"
-            android:tint="@color/md_theme_light_onSurfaceVariant" />
+            app:tint="@color/md_theme_light_onSurfaceVariant" />
 
         <TextView
             android:layout_width="wrap_content"

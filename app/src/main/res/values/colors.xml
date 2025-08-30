@@ -40,4 +40,9 @@
     <color name="success_green">#4CAF50</color>
     <color name="error_red">#F44336</color>
     <color name="warning_orange">#FF9800</color>
+    
+    <!-- Alias colors for code compatibility -->
+    <color name="success_color">@color/success_green</color>
+    <color name="error_color">@color/error_red</color>
+    <color name="warning_color">@color/warning_orange</color>
 </resources>

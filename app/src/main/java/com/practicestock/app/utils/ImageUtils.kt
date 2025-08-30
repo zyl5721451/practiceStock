@@ -40,7 +40,7 @@ object ImageUtils {
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val filename = "IMG_${timeStamp}.jpg"
             
-            val directory = File(context.filesDir, "images")
+            val directory = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images")
             if (!directory.exists()) {
                 directory.mkdirs()
             }

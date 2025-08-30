@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TradeRecordAdapter(
-    private val onItemClick: (TradeRecord) -> Unit
+    private val onItemClick: (TradeRecord) -> Unit,
+    private val onItemLongClick: (TradeRecord) -> Unit
 ) : RecyclerView.Adapter<TradeRecordAdapter.ViewHolder>() {
     
     private var records: List<TradeRecord> = emptyList()
@@ -45,16 +46,16 @@ class TradeRecordAdapter(
         
         fun bind(record: TradeRecord) {
             // 设置开仓理由
-            binding.reasonText.text = record.openReason.displayName
+            binding.reasonText.text = record.openReason?.displayName ?: "未知理由"
             
             // 设置结果标签
-            binding.resultChip.text = record.result.displayName
+            binding.resultChip.text = record.result?.displayName ?: "未知结果"
             
             // 根据结果设置标签颜色
             val chipBackgroundColor = when (record.result) {
                 TradeResult.PROFIT -> ContextCompat.getColor(binding.root.context, R.color.success_color)
                 TradeResult.LOSS -> ContextCompat.getColor(binding.root.context, R.color.error_color)
-                TradeResult.BREAKEVEN -> ContextCompat.getColor(binding.root.context, R.color.warning_color)
+                null -> ContextCompat.getColor(binding.root.context, R.color.md_theme_light_outline)
             }
             binding.resultChip.setChipBackgroundColorResource(android.R.color.transparent)
             binding.resultChip.chipBackgroundColor = android.content.res.ColorStateList.valueOf(chipBackgroundColor)
@@ -78,6 +79,12 @@ class TradeRecordAdapter(
             // 设置点击事件
             binding.root.setOnClickListener {
                 onItemClick(record)
+            }
+            
+            // 设置长按事件
+            binding.root.setOnLongClickListener {
+                onItemLongClick(record)
+                true
             }
         }
     }

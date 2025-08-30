@@ -11,11 +11,9 @@ import com.practicestock.app.model.StatisticsData
 class StatisticsAdapter : RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
     
     private var statistics: List<StatisticsData> = emptyList()
-    private var totalCount: Int = 0
     
     fun updateStatistics(newStatistics: List<StatisticsData>) {
         statistics = newStatistics
-        totalCount = statistics.sumOf { it.count }
         notifyDataSetChanged()
     }
     
@@ -54,15 +52,11 @@ class StatisticsAdapter : RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
             binding.reasonText.text = statisticsData.openReason.displayName
             
             // 设置数量
-            binding.countText.text = statisticsData.count.toString()
+            binding.countText.text = statisticsData.count.toString()+"次"
             
-            // 计算并设置百分比
-            val percentage = if (totalCount > 0) {
-                (statisticsData.count * 100.0 / totalCount)
-            } else {
-                0.0
-            }
-            binding.percentageText.text = String.format("%.1f%%", percentage)
+            // 设置百分比（直接使用StatisticsData中已计算好的百分比）
+            android.util.Log.d("StatisticsAdapter", "Reason: ${statisticsData.openReason}, Percentage: ${statisticsData.percentage}")
+            binding.percentageText.text = String.format("%.1f%%", statisticsData.percentage)
         }
     }
 }

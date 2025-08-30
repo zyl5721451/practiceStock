@@ -8,6 +8,7 @@ import com.practicestock.app.model.OpenReason
 import com.practicestock.app.model.StatisticsData
 import com.practicestock.app.model.TradeRecord
 import com.practicestock.app.model.TradeResult
+import com.practicestock.app.utils.ImageUtils
 import java.util.*
 
 class DataManager private constructor(context: Context) {
@@ -54,25 +55,36 @@ class DataManager private constructor(context: Context) {
     }
     
     fun getStatistics(): List<StatisticsData> {
-        val records = getAllRecords()
+        val records = getAllRecords().filter { it.openReason != null }
         if (records.isEmpty()) return emptyList()
         
-        val reasonCounts = records.groupBy { it.openReason }
+        val reasonCounts = records.groupBy { it.openReason!! }
             .mapValues { it.value.size }
         
         val totalCount = records.size
         
         return reasonCounts.map { (reason, count) ->
+            val percentage = (count.toFloat() / totalCount) * 100f
             StatisticsData(
-                reason = reason,
+                openReason = reason,
                 count = count,
-                percentage = (count.toFloat() / totalCount) * 100f
+                percentage = percentage
             )
         }.sortedByDescending { it.count }
     }
     
+    fun getStatisticsData(): List<StatisticsData> {
+        return getStatistics()
+    }
+    
     fun deleteRecord(recordId: String) {
         val records = getAllRecords().toMutableList()
+        // 找到要删除的记录，如果有图片则先删除图片文件
+        val recordToDelete = records.find { it.id == recordId }
+        recordToDelete?.imagePath?.let { imagePath ->
+            ImageUtils.deleteImageFile(imagePath)
+        }
+        
         records.removeAll { it.id == recordId }
         saveRecords(records)
     }
